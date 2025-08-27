@@ -1,0 +1,100 @@
+.cell {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa; /* Default empty cell color */
+}
+
+.cell:hover {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+/* Start cell - Green */
+.start-cell {
+  background-color: #28a745 !important;
+  color: white;
+}
+
+/* Target cell - Red */
+.target-cell {
+  background-color: #dc3545 !important;
+  color: white;
+}
+
+/* Wall cell - Dark */
+.wall-cell {
+  background-color: #343a40 !important;
+  color: white;
+}
+
+/* Weight cell - Orange */
+.weight-cell {
+  background-color: #fd7e14 !important;
+  color: white;
+}
+
+/* Empty cell - Light */
+.empty-cell {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Algorithm animation states */
+.visited-cell {
+  background-color: #87CEEB !important; /* Sky blue for visited */
+  animation: visitedAnimation 0.3s ease-out;
+}
+
+.path-cell {
+  background-color: #FFD700 !important; /* Gold for shortest path */
+  animation: pathAnimation 0.5s ease-out;
+}
+
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: #40E0D0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+@keyframes pathAnimation {
+  0% {
+    transform: scale(0.6);
+    background-color: #FFA500;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+.weight-text {
+  font-weight: bold;
+  font-size: 10px;
+}
+
+/* Make sure icons are visible */
+.cell i {
+  font-size: 10px;
+}
+
+/* Ensure content stays visible */
+.cell * {
+  pointer-events: none;
+  z-index: 1;
+}
