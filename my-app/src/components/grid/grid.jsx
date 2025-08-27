@@ -1,77 +1,114 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams } from '../../context/context';
-import Cell from '../Cell/Cell';
 import './Grid.css';
 
 const Grid = () => {
-  const { grid, mode, setgrid, start, end } = useParams();
+  const { grid, setgrid, editing, seteditFlag, mode, start, end, run, res, algo } = useParams();
+  
+  const [refarray, setRefArray] = useState(getrefarray(grid));
 
-  const handleCellClick = (x, y) => {
-    if (!mode) return;
-
-    const newGrid = grid.map(row => [...row]); // Create deep copy
-    const cell = newGrid[y][x];
-
-    switch (mode) {
-      case 'setstart':
-        // Clear previous start cell
-        newGrid.forEach(row => {
-          row.forEach(c => c.isstart = false);
-        });
-        cell.isstart = true;
-        cell.iswall = false; // Can't be a wall and start
-        start.current = { x, y };
-        break;
-
-      case 'settarget':
-        // Clear previous target cell
-        newGrid.forEach(row => {
-          row.forEach(c => c.istarget = false);
-        });
-        cell.istarget = true;
-        cell.iswall = false; // Can't be a wall and target
-        end.current = { x, y };
-        break;
-
-      case 'addbricks':
-        if (!cell.isstart && !cell.istarget) {
-          cell.iswall = !cell.iswall;
-          if (cell.iswall) {
-            cell.weight = 1; // Reset weight if making it a wall
-          }
-        }
-        break;
-
-      case 'addweight':
-        if (!cell.isstart && !cell.istarget && !cell.iswall) {
-          cell.weight = cell.weight === 1 ? 3 : 1;
-        }
-        break;
-
-      default:
-        return; // Unknown mode, don't update
-    }
-
-    setgrid(newGrid);
-  };
+  function getrefarray(grid) {
+    let array = [];
+    grid.forEach((elem) => {
+      elem.forEach((child) => {
+        array.push(useRef());
+      });
+    });
+    return array;
+  }
 
   return (
-    <div className="grid-container">
-      <div className="grid">
-        {grid.map((row, y) => (
-          <div key={y} className="grid-row">
-            {row.map((cell, x) => (
-              <Cell 
-                key={`${x}-${y}`}
-                cell={cell}
-                x={x}
-                y={y}
-                onClick={() => handleCellClick(x, y)}
-              />
-            ))}
+    <div className='board'>
+      {refarray.map((elem, index) => {
+        let classList = ['cell'];
+        let yindex = Math.floor(index / 50);
+        let xindex = index % 50;
+        let cell = grid[yindex][xindex];
+
+        if (cell.iswall) {
+          classList.push('wall');
+        }
+
+        return (
+          <div 
+            key={`${index}`} 
+            ref={elem}  
+            className={classList.join(' ')} 
+            onMouseDown={() => { seteditFlag(true) }} 
+            onMouseUp={() => { seteditFlag(false) }}
+            onMouseMove={() => {
+              if (!editing) return;
+              const current = grid[yindex][xindex];
+              if (current.isstart || current.istarget) return;
+              
+              switch(mode) {
+                case 'setstart':
+                  var newgrid = grid.map((elem) => {
+                    return elem.map((elem) => {
+                      if (!elem.isstart) return elem;
+                      return { ...elem, isstart: false };
+                    });
+                  });
+                  newgrid[yindex][xindex] = { 
+                    ...newgrid[yindex][xindex], 
+                    isstart: true, 
+                    istarget: false, 
+                    weight: 1, 
+                    iswall: false 
+                  };
+                  start.current = { x: xindex, y: yindex };
+                  setgrid(newgrid);
+                  break;
+
+                case 'settarget':
+                  var newgrid = grid.map((elem) => {
+                    return elem.map((elem) => {
+                      if (!elem.istarget) return elem;
+                      return { ...elem, istarget: false };
+                    });
+                  });
+                  newgrid[yindex][xindex] = { 
+                    ...newgrid[yindex][xindex], 
+                    isstart: false, 
+                    istarget: true, 
+                    weight: 1, 
+                    iswall: false 
+                  };
+                  end.current = { x: xindex, y: yindex };
+                  setgrid(newgrid);
+                  break;
+
+                case 'addbricks':
+                  var newgrid = grid.slice();
+                  newgrid[yindex][xindex] = { 
+                    ...newgrid[yindex][xindex], 
+                    weight: 1, 
+                    iswall: true 
+                  };
+                  setgrid(newgrid);
+                  break;
+
+                case 'addweight':
+                  var newgrid = grid.slice();
+                  newgrid[yindex][xindex] = { 
+                    ...newgrid[yindex][xindex], 
+                    weight: 5, 
+                    iswall: false 
+                  };
+                  setgrid(newgrid);
+                  break;
+                  
+                default:
+                  return;
+              }
+            }}
+          >
+            {cell.weight > 1 ? <i className="bi bi-virus"></i> : null}
+            {cell.isstart ? <i className="bi bi-geo-alt"></i> : null}
+            {cell.istarget ? <i className="bi bi-geo"></i> : null}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };
