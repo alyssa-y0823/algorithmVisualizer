@@ -1,40 +1,51 @@
-.navbar{
-    width:100%;  
-    height:min(20vh , 100px);
-    background: #FFB6C1; /* Light pink / baby pink background */
+.navbar {
+  width: 100%;
+  height: min(20vh, 100px);
+  background: linear-gradient(135deg, #ff69b4, #ffb6c1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar .container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.navbar .btn {
+  background-color: #ffb6c1 !important;
+  border-color: #ff69b4 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+}
+
+.navbar .btn:hover {
+  background-color: #ff69b4 !important;
+  border-color: #ff1493 !important;
+  transform: translateY(-2px);
 }
 
 .navbar .selected {
-    box-shadow: #F8BBD9 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  background-color: #ff1493 !important;
+  border-color: #dc143c !important;
+  box-shadow: 0 4px 8px rgba(255, 20, 147, 0.3);
 }
 
-/* Override Bootstrap button colors to match pink theme */
-.navbar .btn-primary {
-    background-color: #FF69B4; /* Hot pink for buttons */
-    border-color: #FF1493; /* Deep pink border */
-    color: white;
-}
-
-.navbar .btn-primary:hover {
-    background-color: #FF1493; /* Deep pink on hover */
-    border-color: #DC143C; /* Darker pink border on hover */
-}
-
-.navbar .btn-primary:focus,
-.navbar .btn-primary:active {
-    background-color: #FF1493;
-    border-color: #DC143C;
-    box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
-}
-
-/* Style the select dropdown to match */
 .navbar .form-select {
-    background-color: #FFE4E1; /* Misty rose background */
-    border-color: #FF69B4;
-    color: #8B008B; /* Dark magenta text */
+  min-width: 200px;
+  background-color: #ffb6c1;
+  border-color: #ff69b4;
+  color: #ffffff;
 }
 
 .navbar .form-select:focus {
-    border-color: #FF1493;
-    box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+  border-color: #ff1493;
+  box-shadow: 0 0 0 0.2rem rgba(255, 105, 180, 0.25);
+}
+
+.navbar .form-select option {
+  background-color: #ffb6c1;
+  color: #ffffff;
 }

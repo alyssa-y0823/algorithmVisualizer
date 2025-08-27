@@ -35,7 +35,7 @@ function reconstructPath(endNode) {
 }
 
 // Dijkstra's Algorithm
-export function dijkstra(grid, startNode, endNode) {
+export function Dijkstra(grid, startNode, endNode) {
   const visitedNodesInOrder = [];
   startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
